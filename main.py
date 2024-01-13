@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Core fake currency class with methods to train and predict
+'''
+    Core fake currency class with methods to train and predict
 
 @author Karthick Sundar C K
 '''

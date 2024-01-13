@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-''' flask API calls that allows user to do single
+'''
+    flask API calls that allows user to do single
     predict or batch prediction to detect fake currencies
 
 @author Karthick Sundar C K
 '''
 from flask import Flask, request
 from main import FakeCurrencyDetection
-import flasgger
 from flasgger import Swagger
 
 
@@ -78,9 +78,6 @@ def predict_file():
                 description: The output values
 
     """
-    # fake_detector1 = fake_currency_detection
-    #                  (data_path="{}/BankNote_Authentication.csv".format(Path.cwd()),
-    #                   mode='file_test',model_path="./fake_currency_detection_model.pkl")
     file_path = request.files.get('file')
     print("***", file_path)
     fake_detector1 = FakeCurrencyDetection(data_path=request.files.get('file'),

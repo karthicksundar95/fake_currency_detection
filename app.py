@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' flask API calls that allows user to do single
+'''
+    flask API calls that allows user to do single
     predict or batch prediction to detect fake currencies
 
 @author Karthick Sundar C K
@@ -31,7 +32,6 @@ def predict():
     out_of_sample_test = [[variance, skewness, kurtosis, entropy]]
     fake_detector = FakeCurrencyDetection(mode='single_input_test',
                                           model_path="./fake_currency_detection_model.pkl")
-    # out_of_sample_test = [[3, 2, 1, 1]]
     fake_detector.predict_out_of_sample("./fake_currency_detection_model.pkl", out_of_sample_test)
     return fake_detector.detection
 
@@ -42,9 +42,6 @@ def predict_file():
     API call to post a file with inputs and generated output for all
     :return: array of values saying 0 or 1 for not-fake and fake detection
     """
-    # fake_detector1 = fake_currency_detection
-    #                  (data_path="{}/BankNote_Authentication.csv".format(Path.cwd()),
-    #                   mode='file_test',model_path="./fake_currency_detection_model.pkl")
     file_path = request.files.get('file')
     print("***", file_path)
     fake_detector1 = FakeCurrencyDetection(data_path=request.files.get('file'),
