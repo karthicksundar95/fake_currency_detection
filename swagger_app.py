@@ -6,9 +6,12 @@
 '''
 from flask import Flask, request
 from main import FakeCurrencyDetection
+import flasgger
+from flasgger import Swagger
 
 
 fcd_app = Flask(__name__)
+Swagger(fcd_app)
 
 @fcd_app.route('/')
 def welcome():
@@ -20,27 +23,60 @@ def welcome():
 
 @fcd_app.route('/predict')
 def predict():
-    """
-    API to send single input for prediction
-    :return: Yes or No if the currency is fake
-    """
+    """Let's Authenticate the Banks Note
+        This is using docstrings for specifications.
+        ---
+        parameters:
+          - name: variance
+            in: query
+            type: number
+            required: true
+          - name: skewness
+            in: query
+            type: number
+            required: true
+          - name: kurtosis
+            in: query
+            type: number
+            required: true
+          - name: entropy
+            in: query
+            type: number
+            required: true
+        responses:
+            200:
+                description: The output values
+
+        """
     variance = request.args.get('variance')
     skewness = request.args.get('skewness')
     kurtosis = request.args.get('kurtosis')
     entropy = request.args.get('entropy')
     out_of_sample_test = [[variance, skewness, kurtosis, entropy]]
+    print(out_of_sample_test,"%%%%")
     fake_detector = FakeCurrencyDetection(mode='single_input_test',
                                           model_path="./fake_currency_detection_model.pkl")
     # out_of_sample_test = [[3, 2, 1, 1]]
     fake_detector.predict_out_of_sample("./fake_currency_detection_model.pkl", out_of_sample_test)
-    return fake_detector.detection
+    print("^^^",fake_detector.detection)
+    return "The given currency is "+str(fake_detector.detection)
 
 
 @fcd_app.route('/predict_file',methods=['POST'])
 def predict_file():
-    """
-    API call to post a file with inputs and generated output for all
-    :return: array of values saying 0 or 1 for not-fake and fake detection
+    """Let's Authenticate the Banks Note
+        This is using docstrings for specifications.
+        ---
+        parameters:
+          - name: file
+            in: formData
+            type: file
+            required: true
+
+        responses:
+            200:
+                description: The output values
+
     """
     # fake_detector1 = fake_currency_detection
     #                  (data_path="{}/BankNote_Authentication.csv".format(Path.cwd()),
@@ -55,11 +91,4 @@ def predict_file():
 
 
 if __name__ ==  "__main__":
-    fcd_app.run()
-    # fake_detector = fake_currency_detection("{}/BankNote_Authentication.csv".format(Path.cwd()))
-    # print("The accuracy of the model is {}".format(fake_detector.score * 100))
-    # out_of_sample_test = [[3,2,1,1]]
-    # fake_detector.predict_out_of_sample
-    #               ("./fake_currency_detection_model.pkl", out_of_sample_test)
-    # print("The given curreny with features {} is {}".format
-    #       (out_of_sample_test, fake_detector.detection))
+    fcd_app.run(port='8000')
